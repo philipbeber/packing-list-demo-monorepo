@@ -2,6 +2,8 @@
 
 The beginnings of an app to help groups of friends (camps) organize their trips to the desert.
 
+Demo: <https://philipbeber.github.io/packing-list-demo/demo/>
+
 ## Getting started
 
 ### `npm install`
