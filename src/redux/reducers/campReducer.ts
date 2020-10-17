@@ -24,7 +24,7 @@ const campReducer = (state: CampState = initialState, action: CampActions) => {
       const camp = state.camps.find((c) => c.id === action.payload);
       return {
         ...state,
-        selectedCamp: createSelectedCamp(camp),
+        selectedCamp: mapCampToSelectedCamp(camp),
       };
     }
     case "CLOSE_CAMP": {
@@ -38,7 +38,7 @@ const campReducer = (state: CampState = initialState, action: CampActions) => {
       return {
         ...state,
         selectedCamp: action.payload.navigateTo
-          ? createSelectedCamp(newCamp)
+          ? mapCampToSelectedCamp(newCamp)
           : state.selectedCamp,
         camps: [...state.camps, newCamp],
         list: [...state.list, { id: newCamp.id, name: newCamp.name }],
@@ -59,16 +59,13 @@ const campReducer = (state: CampState = initialState, action: CampActions) => {
         camps: state.camps.map((c) => (c.id === camp.id ? newCamp : c)),
         selectedCamp:
           state.selectedCamp?.id === camp.id
-            ? createSelectedCamp(newCamp)
+            ? mapCampToSelectedCamp(newCamp)
             : state.selectedCamp,
       };
     }
     case "OPEN_CAMP_LIST": {
-      const camp = getSelectedCamp(state);
-      if (!camp) {
-        return state;
-      }
-      const list = camp.lists.find((l) => l.id === action.payload);
+      const camp = state.camps.find((c) => c.id === action.payload.campId);
+      const list = camp?.lists.find((l) => l.id === action.payload.listId);
       return {
         ...state,
         selectedList: list,
@@ -126,7 +123,7 @@ const campReducer = (state: CampState = initialState, action: CampActions) => {
 };
 export default campReducer;
 
-function createSelectedCamp(camp?: Camp) {
+function mapCampToSelectedCamp(camp?: Camp) {
   if (!camp) {
     return undefined;
   }
@@ -138,12 +135,6 @@ function createSelectedCamp(camp?: Camp) {
       name: l.name,
     })),
   };
-}
-
-function getSelectedCamp(state: CampState) {
-  return state.selectedCamp
-    ? state.camps.find((c) => c.id === state.selectedCamp?.id)
-    : undefined;
 }
 
 function transformItems(

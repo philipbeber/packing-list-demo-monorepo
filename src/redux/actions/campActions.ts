@@ -27,7 +27,10 @@ export interface ICreateCampListAction {
 
 export interface IOpenCampListAction {
   readonly type: "OPEN_CAMP_LIST";
-  payload: string;
+  payload: {
+    campId: string;
+    listId: string;
+  };
 }
 
 export interface ICloseCampListAction {

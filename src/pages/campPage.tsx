@@ -137,7 +137,10 @@ const CampPage: React.FC = () => {
                   key={list.id}
                   button
                   onClick={() =>
-                    campDispatch({ type: "OPEN_CAMP_LIST", payload: list.id })
+                    campDispatch({
+                      type: "OPEN_CAMP_LIST",
+                      payload: { campId: camp.id, listId: list.id },
+                    })
                   }
                 >
                   <ListItemText primary={list.name} />
