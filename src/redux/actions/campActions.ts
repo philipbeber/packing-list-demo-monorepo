@@ -1,4 +1,11 @@
-import { Camp, Item, ItemState, List } from "../../model";
+import {
+  Camp,
+  CampOperation,
+  CampOperations,
+  Item,
+  ItemState,
+  List,
+} from "../../model";
 
 export interface IOpenCampAction {
   readonly type: "OPEN_CAMP";
@@ -13,16 +20,12 @@ export interface ICreateCampAction {
   readonly type: "CREATE_CAMP";
   payload: {
     camp: Camp;
-    navigateTo: boolean;
   };
 }
 
-export interface ICreateCampListAction {
-  readonly type: "CREATE_CAMP_LIST";
-  payload: {
-    campId: string;
-    list: List;
-  };
+export interface IUserOperationAction {
+  readonly type: "USER_OPERATION";
+  payload: CampOperations;
 }
 
 export interface IOpenCampListAction {
@@ -37,35 +40,6 @@ export interface ICloseCampListAction {
   readonly type: "CLOSE_CAMP_LIST";
 }
 
-export interface ICreateCampItemAction {
-  readonly type: "CREATE_CAMP_ITEM";
-  payload: {
-    campId: string;
-    listId: string;
-    item: Item;
-  };
-}
-
-export interface IChangeCampItemStateAction {
-  readonly type: "CHANGE_CAMP_ITEM_STATE";
-  payload: {
-    campId: string;
-    listId: string;
-    itemIds: string[];
-    state: ItemState;
-  };
-}
-
-export interface IChangeCampItemDeletedAction {
-  readonly type: "CHANGE_CAMP_ITEM_DELETED";
-  payload: {
-    campId: string;
-    listId: string;
-    itemIds: string[];
-    deleted: boolean;
-  };
-}
-
 export interface IClearCampDataAction {
   readonly type: "CLEAR_CAMP_DATA";
 }
@@ -74,10 +48,7 @@ export type CampActions =
   | IOpenCampAction
   | ICloseCampAction
   | ICreateCampAction
-  | ICreateCampListAction
+  | IUserOperationAction
   | IOpenCampListAction
   | ICloseCampListAction
-  | ICreateCampItemAction
-  | IClearCampDataAction
-  | IChangeCampItemStateAction
-  | IChangeCampItemDeletedAction;
+  | IClearCampDataAction;

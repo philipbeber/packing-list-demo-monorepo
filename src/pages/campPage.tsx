@@ -59,11 +59,8 @@ const CampPage: React.FC = () => {
       return;
     }
     campDispatch({
-      type: "CREATE_CAMP_LIST",
-      payload: {
-        campId: camp.id,
-        list: createList(newListName),
-      },
+      type: "USER_OPERATION",
+      payload: createList(camp.id, newListName),
     });
     setNewListName("");
   };

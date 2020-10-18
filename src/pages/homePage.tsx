@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/reducers/rootReducer";
 import CreateCamp from "../components/createCamp";
 import { CampActions } from "../redux/actions/campActions";
+import { createSelector } from "reselect";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,9 +33,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const campListSelector = createSelector(
+  (state: AppState) => state.camp.camps,
+  (camps) =>
+    camps.map((camp) => ({
+      id: camp.id,
+      name: camp.name,
+    }))
+);
+
 const HomePage: React.FC = () => {
   const classes = useStyles();
-  const campList = useSelector((state: AppState) => state.camp.list);
+  const campList = useSelector((state: AppState) => campListSelector(state));
   const [createCampOpen, setCreateCampOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const campDispatch = useDispatch<Dispatch<CampActions>>();

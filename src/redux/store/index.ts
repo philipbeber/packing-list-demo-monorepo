@@ -3,6 +3,7 @@ import { createStore, Store } from "redux";
 import rootReducer, { AppState } from "../reducers/rootReducer";
 import { devToolsEnhancer } from "redux-devtools-extension";
 import { AppActions } from "../actions";
+import { initialState } from "../reducers/campReducer";
 const store: Store<AppState, AppActions> = createStore(
   rootReducer,
   loadState(),
@@ -24,8 +25,14 @@ store.subscribe(
 function loadState() {
   try {
     const serializedState = localStorage.getItem("state");
-    return serializedState ? JSON.parse(serializedState) : undefined;
+    if (serializedState) {
+      const state = JSON.parse(serializedState);
+      state.camp = Object.assign({}, initialState, state.camp);
+      console.log(state);
+      return state;
+    }
   } catch (err) {
-    return undefined;
+    console.warn(err);
   }
+  return undefined;
 }

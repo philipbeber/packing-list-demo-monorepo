@@ -38,7 +38,6 @@ const CreateCamp: React.FC<CreateCampProps> = (props) => {
       type: "CREATE_CAMP",
       payload: {
         camp: createCamp(campName),
-        navigateTo: true,
       },
     });
     setCampName("");

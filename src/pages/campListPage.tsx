@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, useMemo } from "react";
+import React, { Dispatch, Fragment } from "react";
 import * as Icons from "@material-ui/icons";
 import Box from "@material-ui/core/Box/Box";
 import Container from "@material-ui/core/Container/Container";
@@ -21,7 +21,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/reducers/rootReducer";
 import { CampActions } from "../redux/actions/campActions";
-import { createItem, ItemState } from "../model";
+import {
+  changeItemDeleted,
+  changeItemState,
+  createItem,
+  ItemState,
+} from "../model";
 import { createSelector } from "reselect";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,22 +55,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// So far this control is a singleton so don't really need a factory here, could
-// just have const itemsViewSelector = createSelector... at the global level.
-const makeItemsViewSelector = () =>
-  createSelector(
-    [
-      (state: AppState) => state.camp.selectedList?.items,
-      (state: AppState, checkedIds: string[]) => checkedIds,
-    ],
-    (items, checkedIds) =>
-      items
-        ?.filter((item) => !item.deleted)
-        .map((item) => ({
-          ...item,
-          checked: checkedIds.indexOf(item.id) >= 0,
-        }))
-  );
+const selectedCampSelector = createSelector(
+  (state: AppState) => state.camp.camps,
+  (state: AppState) => state.camp.selectedCamp,
+  (camps, selectedCamp) => {
+    return camps.find((c) => c.id === selectedCamp?.id);
+  }
+);
+
+const selectedListSelector = createSelector(
+  (state: AppState) => selectedCampSelector(state),
+  (state: AppState) => state.camp.selectedList,
+  (selectedCamp, selectedList) => {
+    return selectedCamp?.lists.find((l) => l.id === selectedList);
+  }
+);
+
+const itemsViewSelector = createSelector(
+  (state: AppState) => selectedListSelector(state)?.items,
+  (state: AppState, checkedIds: string[]) => checkedIds,
+  (items, checkedIds) =>
+    items
+      ?.filter((item) => !item.deleted)
+      .map((item) => ({
+        ...item,
+        checked: checkedIds.indexOf(item.id) >= 0,
+      }))
+);
 
 const CampListPage: React.FC = () => {
   const classes = useStyles();
@@ -79,12 +95,12 @@ const CampListPage: React.FC = () => {
   );
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
   const camp = useSelector((state: AppState) => state.camp.selectedCamp);
-  const list = useSelector((state: AppState) => state.camp.selectedList);
+  const listId = useSelector((state: AppState) => state.camp.selectedList);
   // Add 'checked' property and filter out deleted items
-  const itemsViewSelector = useMemo(makeItemsViewSelector, []);
   const itemsView = useSelector((state: AppState) =>
     itemsViewSelector(state, selectedItems)
   );
+  const list = camp?.lists.find((l) => l.id === listId);
 
   const campDispatch = useDispatch<Dispatch<CampActions>>();
   if (!camp || !list) {
@@ -96,18 +112,19 @@ const CampListPage: React.FC = () => {
       return;
     }
     campDispatch({
-      type: "CREATE_CAMP_ITEM",
-      payload: {
-        campId: camp.id,
-        listId: list.id,
-        item: createItem(newItemName),
-      },
+      type: "USER_OPERATION",
+      payload: createItem(camp.id, list.id, newItemName),
     });
     setNewItemName("");
   };
 
   const handleSelectAll = () => {
     setSelectedItems(itemsView?.map((item) => item.id) || []);
+    setAppbarAnchorEl(null);
+  };
+
+  const handleUnselectAll = () => {
+    setSelectedItems([]);
     setAppbarAnchorEl(null);
   };
 
@@ -118,13 +135,8 @@ const CampListPage: React.FC = () => {
   const handleBulkChangeItemState = (itemState: ItemState) => () => {
     if (selectedItems.length) {
       campDispatch({
-        type: "CHANGE_CAMP_ITEM_STATE",
-        payload: {
-          campId: camp.id,
-          listId: list.id,
-          itemIds: selectedItems,
-          state: itemState,
-        },
+        type: "USER_OPERATION",
+        payload: changeItemState(camp.id, list.id, selectedItems, itemState),
       });
     }
     setSelectedItems([]);
@@ -134,13 +146,8 @@ const CampListPage: React.FC = () => {
   const handleBulkDeleteItems = () => {
     if (selectedItems.length) {
       campDispatch({
-        type: "CHANGE_CAMP_ITEM_DELETED",
-        payload: {
-          campId: camp.id,
-          listId: list.id,
-          itemIds: selectedItems,
-          deleted: true,
-        },
+        type: "USER_OPERATION",
+        payload: changeItemDeleted(camp.id, list.id, selectedItems, true),
       });
     }
     setSelectedItems([]);
@@ -190,7 +197,18 @@ const CampListPage: React.FC = () => {
             open={Boolean(appbarAnchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleSelectAll}>Select all</MenuItem>
+            <MenuItem
+              onClick={handleSelectAll}
+              disabled={selectedItems.length === itemsView?.length}
+            >
+              Select all
+            </MenuItem>
+            <MenuItem
+              onClick={handleUnselectAll}
+              disabled={selectedItems.length === 0}
+            >
+              Unselect all
+            </MenuItem>
             <MenuItem onClick={handleMenuClose} disabled>
               Show deleted items
             </MenuItem>
@@ -297,13 +315,13 @@ const CampListPage: React.FC = () => {
                 className={classes.itemStateSelector}
                 onChange={(event) =>
                   campDispatch({
-                    type: "CHANGE_CAMP_ITEM_STATE",
-                    payload: {
-                      campId: camp.id,
-                      listId: list.id,
-                      itemIds: [item.id],
-                      state: event.target.value as ItemState,
-                    },
+                    type: "USER_OPERATION",
+                    payload: changeItemState(
+                      camp.id,
+                      list.id,
+                      [item.id],
+                      event.target.value as ItemState
+                    ),
                   })
                 }
               >
