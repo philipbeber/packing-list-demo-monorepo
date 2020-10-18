@@ -3,21 +3,27 @@ import { createStore, Store } from "redux";
 import rootReducer, { AppState } from "../reducers/rootReducer";
 import { devToolsEnhancer } from "redux-devtools-extension";
 import { AppActions } from "../actions";
-import { initialState } from "../reducers/campReducer";
+const version = "0.2";
+interface FrozenState {
+  version: string;
+  state: AppState;
+}
+
 const store: Store<AppState, AppActions> = createStore(
   rootReducer,
   loadState(),
   devToolsEnhancer({})
 );
 export default store;
-const version = "0.1";
 
 store.subscribe(
   _.throttle(() => {
     try {
-      const state = store.getState() as any;
-      state.version = version;
-      const serializedState = JSON.stringify(state);
+      const frozeState: FrozenState = {
+        version,
+        state: store.getState(),
+      };
+      const serializedState = JSON.stringify(frozeState);
       localStorage.setItem("state", serializedState);
     } catch {
       // ignore write errors
@@ -29,9 +35,9 @@ function loadState() {
   try {
     const serializedState = localStorage.getItem("state");
     if (serializedState) {
-      const state = JSON.parse(serializedState);
-      if (state.version === version) {
-        return state;
+      const frozeState = JSON.parse(serializedState) as FrozenState;
+      if (frozeState.version === version) {
+        return frozeState.state;
       }
     }
   } catch (err) {
