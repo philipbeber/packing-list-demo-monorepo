@@ -1,5 +1,7 @@
 # Packing List Demo
 
+[![Build Status](https://travis-ci.com/philipbeber/packing-list-demo.svg)](https://travis-ci.com/philipbeber/packing-list-demo)
+
 The beginnings of an app to help groups of friends (camps) organize their trips to the desert.
 
 Demo: <https://philipbeber.github.io/packing-list-demo/demo/>
