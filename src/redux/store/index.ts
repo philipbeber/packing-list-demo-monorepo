@@ -10,11 +10,14 @@ const store: Store<AppState, AppActions> = createStore(
   devToolsEnhancer({})
 );
 export default store;
+const version = "0.1";
 
 store.subscribe(
   _.throttle(() => {
     try {
-      const serializedState = JSON.stringify(store.getState());
+      const state = store.getState() as any;
+      state.version = version;
+      const serializedState = JSON.stringify(state);
       localStorage.setItem("state", serializedState);
     } catch {
       // ignore write errors
@@ -27,9 +30,9 @@ function loadState() {
     const serializedState = localStorage.getItem("state");
     if (serializedState) {
       const state = JSON.parse(serializedState);
-      state.camp = Object.assign({}, initialState, state.camp);
-      console.log(state);
-      return state;
+      if (state.version === version) {
+        return state;
+      }
     }
   } catch (err) {
     console.warn(err);
