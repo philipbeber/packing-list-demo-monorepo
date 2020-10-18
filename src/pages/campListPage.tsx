@@ -28,7 +28,7 @@ import {
   ItemState,
 } from "../model";
 import { createSelector } from "reselect";
-import { selectedListSelector } from "../redux/selectors.ts";
+import { selectedListSelector } from "../redux/selectors";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
