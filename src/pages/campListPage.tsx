@@ -28,6 +28,7 @@ import {
   ItemState,
 } from "../model";
 import { createSelector } from "reselect";
+import { selectedListSelector } from "../redux/selectors.ts";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -54,22 +55,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 6,
   },
 }));
-
-const selectedCampSelector = createSelector(
-  (state: AppState) => state.camp.camps,
-  (state: AppState) => state.camp.selectedCamp,
-  (camps, selectedCamp) => {
-    return camps.find((c) => c.id === selectedCamp?.id);
-  }
-);
-
-const selectedListSelector = createSelector(
-  (state: AppState) => selectedCampSelector(state),
-  (state: AppState) => state.camp.selectedList,
-  (selectedCamp, selectedList) => {
-    return selectedCamp?.lists.find((l) => l.id === selectedList);
-  }
-);
 
 const itemsViewSelector = createSelector(
   (state: AppState) => selectedListSelector(state)?.items,
