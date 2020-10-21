@@ -19,6 +19,7 @@ import { AppState } from "../redux/reducers/rootReducer";
 import { CampActions } from "../redux/actions/campActions";
 import { createList } from "../model";
 import CampListPage from "./campListPage";
+import { selectedCampSelector } from "../redux/selectors";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -44,9 +45,9 @@ const CampPage: React.FC = () => {
   const classes = useStyles();
   const [createListOpen, setCreateListOpen] = React.useState(false);
   const [newListName, setNewListName] = React.useState("");
-  const camp = useSelector((state: AppState) => state.camp.selectedCamp);
+  const camp = useSelector((state: AppState) => selectedCampSelector(state));
   const selectedList = useSelector(
-    (state: AppState) => state.camp.selectedList
+    (state: AppState) => state.camp.selectedListId
   );
 
   const campDispatch = useDispatch<Dispatch<CampActions>>();

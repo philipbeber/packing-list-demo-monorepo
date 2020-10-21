@@ -6,6 +6,7 @@ import {
   ChangeCampItemStateOperation,
   CreateCampItemOperation,
   CreateCampListOperation,
+  CreateCampOperation,
   ListOperation,
 } from "./campOperations";
 import { ItemState } from "./item";
@@ -14,7 +15,7 @@ export class User {
   constructor(public name: string, public camps: Camp[] = []) {}
 }
 
-export function generateId() {
+function generateId() {
   return uuid.generate();
 }
 
@@ -33,8 +34,12 @@ function createListOperation(campId: string, listId: string): ListOperation {
   };
 }
 
-export function createCamp(name: string) {
-  return new Camp(generateId(), name);
+export function createCamp(name: string): CreateCampOperation {
+  return {
+    ...createOperation(generateId()),
+    type: "CREATE_CAMP",
+    name,
+  };
 }
 
 export function createList(

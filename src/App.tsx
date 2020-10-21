@@ -4,9 +4,9 @@ import { AppState } from "./redux/reducers/rootReducer";
 import HomePage from "./pages/homePage";
 import CampPage from "./pages/campPage";
 function App() {
-  const selectedCamp = useSelector<AppState>(
-    (state) => state.camp.selectedCamp
+  const selectedCampId = useSelector<AppState>(
+    (state) => state.camp.selectedCampId
   );
-  return <div>{selectedCamp ? <CampPage /> : <HomePage />}</div>;
+  return <div>{selectedCampId ? <CampPage /> : <HomePage />}</div>;
 }
 export default App;

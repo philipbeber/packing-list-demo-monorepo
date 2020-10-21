@@ -28,7 +28,7 @@ import {
   ItemState,
 } from "../model";
 import { createSelector } from "reselect";
-import { selectedListSelector } from "../redux/selectors";
+import { selectedCampSelector, selectedListSelector } from "../redux/selectors";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -79,16 +79,16 @@ const CampListPage: React.FC = () => {
     null
   );
   const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
-  const camp = useSelector((state: AppState) => state.camp.selectedCamp);
-  const listId = useSelector((state: AppState) => state.camp.selectedList);
+  const camp = useSelector((state: AppState) => selectedCampSelector(state));
+  const list = useSelector((state: AppState) => selectedListSelector(state));
   // Add 'checked' property and filter out deleted items
   const itemsView = useSelector((state: AppState) =>
     itemsViewSelector(state, selectedItems)
   );
-  const list = camp?.lists.find((l) => l.id === listId);
 
   const campDispatch = useDispatch<Dispatch<CampActions>>();
   if (!camp || !list) {
+    // Assert?
     return <Fragment></Fragment>;
   }
 

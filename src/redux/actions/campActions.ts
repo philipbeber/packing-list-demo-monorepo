@@ -16,13 +16,6 @@ export interface ICloseCampAction {
   readonly type: "CLOSE_CAMP";
 }
 
-export interface ICreateCampAction {
-  readonly type: "CREATE_CAMP";
-  payload: {
-    camp: Camp;
-  };
-}
-
 export interface IUserOperationAction {
   readonly type: "USER_OPERATION";
   payload: CampOperations;
@@ -47,7 +40,6 @@ export interface IClearCampDataAction {
 export type CampActions =
   | IOpenCampAction
   | ICloseCampAction
-  | ICreateCampAction
   | IUserOperationAction
   | IOpenCampListAction
   | ICloseCampListAction
