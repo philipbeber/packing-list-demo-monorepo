@@ -1,5 +1,5 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { applyOperationToCamp, Camp, CampOperations } from "../../model";
-import { CampActions } from "../actions/campActions";
 
 interface CampState {
   selectedCampId?: string;
@@ -9,65 +9,64 @@ interface CampState {
 }
 export const initialState: CampState = {
   camps: [],
-  pendingOperations: [],
+  pendingOperations: []
 };
-const campReducer = (
-  state: CampState = initialState,
-  action: CampActions
-): CampState => {
-  switch (action.type) {
-    case "OPEN_CAMP": {
-      return {
-        ...state,
-        selectedCampId: action.payload,
-      };
-    }
-    case "CLOSE_CAMP": {
-      return {
-        ...state,
-        selectedCampId: undefined,
-      };
-    }
-    case "OPEN_CAMP_LIST": {
-      return {
-        ...state,
-        selectedListId: action.payload.listId,
-      };
-    }
-    case "CLOSE_CAMP_LIST": {
-      return {
-        ...state,
-        selectedListId: undefined,
-      };
-    }
-    case "USER_OPERATION": {
+
+const campSlice = createSlice({
+  name: "camp",
+  initialState,
+  reducers: {
+    openCamp(state, action: PayloadAction<string>) {
+      state.selectedCampId = action.payload;
+    },
+    closeCamp(state) {
+      state.selectedCampId = undefined;
+    },
+    openCampList(
+      state,
+      action: PayloadAction<{
+        campId: string;
+        listId: string;
+      }>
+    ) {
+      state.selectedListId = action.payload.listId;
+    },
+    closeCampList(state) {
+      state.selectedListId = undefined;
+    },
+    sendUserOperation(state, action: PayloadAction<CampOperations>) {
       // I.e. an operation that will also be queued and sent to the server
       const operation = action.payload;
+      state.pendingOperations.push(operation);
       if (operation.type === "CREATE_CAMP") {
         const newCamp = new Camp(operation.campId, operation.name);
-        return {
-          ...state,
-          selectedCampId: operation.campId,
-          camps: [...state.camps, newCamp],
-          pendingOperations: [...state.pendingOperations, operation],
-        };
+        state.selectedCampId = operation.campId;
+        state.camps.push(newCamp);
+      } else {
+        const camp = state.camps.find((c) => c.id === operation.campId);
+        if (camp) {
+          applyOperationToCamp(camp, operation);
+        }
+        return;
       }
-      const camp = state.camps.find((c) => c.id === operation.campId);
-      if (!camp) {
-        return state;
-      }
-      const newCamp = applyOperationToCamp(camp, operation);
-      return {
-        ...state,
-        camps: state.camps.map((c) => (c.id === camp.id ? newCamp : c)),
-        pendingOperations: [...state.pendingOperations, operation],
-      };
-    }
-    case "CLEAR_CAMP_DATA":
-      // Just used for testing. Will remove this
+    },
+    clearCampData() {
       return initialState;
-    default:
-      return state;
+    }
   }
-};
+});
+
+// Extract the action creators object and the reducer
+const { actions, reducer: campReducer } = campSlice;
+export const {
+  openCamp,
+  closeCamp,
+  //openCampList,
+  closeCampList,
+  sendUserOperation,
+  clearCampData
+} = actions;
+export const openCampList = (campId: string, listId: string) =>
+  actions.openCampList({ campId, listId });
+// Export the reducer, either as a default or named export
 export default campReducer;

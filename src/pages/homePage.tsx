@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment } from "react";
+import React, { Fragment } from "react";
 import * as Icons from "@material-ui/icons";
 import Box from "@material-ui/core/Box/Box";
 import Container from "@material-ui/core/Container/Container";
@@ -13,28 +13,25 @@ import {
   makeStyles,
   Menu,
   MenuItem,
-  Toolbar,
+  Toolbar
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../redux/reducers/rootReducer";
+import { useSelector } from "react-redux";
+import { AppState } from "../redux/store";
 import CreateCamp from "../components/createCamp";
-import {
-  CampActions,
-  clearCampData,
-  openCamp
-} from "../redux/actions/campActions";
 import { createSelector } from "reselect";
+import { useAppDispatch } from "../redux/hooks";
+import { clearCampData, openCamp } from "../redux/reducers/campReducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   title: {
-    flexGrow: 1,
-  },
+    flexGrow: 1
+  }
 }));
 
 const campListSelector = createSelector(
@@ -42,7 +39,7 @@ const campListSelector = createSelector(
   (camps) =>
     camps.map((camp) => ({
       id: camp.id,
-      name: camp.name,
+      name: camp.name
     }))
 );
 
@@ -51,7 +48,7 @@ const HomePage: React.FC = () => {
   const campList = useSelector((state: AppState) => campListSelector(state));
   const [createCampOpen, setCreateCampOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const campDispatch = useDispatch<Dispatch<CampActions>>();
+  const campDispatch = useAppDispatch();
 
   return (
     <Container maxWidth="sm">

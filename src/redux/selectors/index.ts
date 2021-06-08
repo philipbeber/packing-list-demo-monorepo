@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { AppState } from "../reducers/rootReducer";
+import { AppState } from "../store";
 
 export const selectedCampSelector = createSelector(
   (state: AppState) => state.camp.camps,

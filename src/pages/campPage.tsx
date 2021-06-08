@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment } from "react";
+import React, { Fragment } from "react";
 import * as Icons from "@material-ui/icons";
 import Box from "@material-ui/core/Box/Box";
 import Container from "@material-ui/core/Container/Container";
@@ -12,38 +12,34 @@ import {
   ListItemText,
   makeStyles,
   TextField,
-  Toolbar,
+  Toolbar
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../redux/reducers/rootReducer";
-import {
-  CampActions,
-  closeCamp,
-  openCampList,
-  sendUserOperation
-} from "../redux/actions/campActions";
+import { useSelector } from "react-redux";
+import { AppState } from "../redux/store";
 import { createList } from "../model";
 import CampListPage from "./campListPage";
 import { selectedCampSelector } from "../redux/selectors";
+import { closeCamp, openCampList, sendUserOperation } from "../redux/reducers/campReducer";
+import { useAppDispatch } from "../redux/hooks";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
-    marginRight: -15,
+    marginRight: -15
   },
   appBarTitle: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuAddButton: {
-    marginRight: -16,
+    marginRight: -16
   },
   title: {
-    marginTop: 10,
+    marginTop: 10
   },
   addListButton: {
     height: 32,
     marginTop: 16,
-    marginLeft: 16,
-  },
+    marginLeft: 16
+  }
 }));
 
 const CampPage: React.FC = () => {
@@ -55,7 +51,7 @@ const CampPage: React.FC = () => {
     (state: AppState) => state.camp.selectedListId
   );
 
-  const campDispatch = useDispatch<Dispatch<CampActions>>();
+  const campDispatch = useAppDispatch();
   if (!camp) {
     return <Fragment></Fragment>;
   }
@@ -136,7 +132,11 @@ const CampPage: React.FC = () => {
                 <ListItem
                   key={list.id}
                   button
-                  onClick={() => campDispatch(openCampList(camp.id, list.id))}
+                  onClick={() =>
+                    campDispatch(
+                      openCampList(camp.id, list.id)
+                    )
+                  }
                 >
                   <ListItemText primary={list.name} />
                 </ListItem>

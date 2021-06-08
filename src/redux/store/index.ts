@@ -1,20 +1,30 @@
 import * as _ from "lodash";
-import { createStore, Store } from "redux";
-import rootReducer, { AppState } from "../reducers/rootReducer";
-import { devToolsEnhancer } from "redux-devtools-extension";
-import { AppActions } from "../actions";
+import { configureStore } from "@reduxjs/toolkit";
+import campReducer from "../reducers/campReducer";
+import userReducer from "../reducers/userReducer";
 const version = "0.2";
+
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    camp: campReducer,
+  },
+  preloadedState: loadState(),
+});
+export default store;
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type AppState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;
+
 interface FrozenState {
   version: string;
-  state: AppState;
+  state: {
+    user: ReturnType<typeof userReducer>;
+    camp: ReturnType<typeof campReducer>;
+  };
 }
-
-const store: Store<AppState, AppActions> = createStore(
-  rootReducer,
-  loadState(),
-  devToolsEnhancer({})
-);
-export default store;
 
 store.subscribe(
   _.throttle(() => {

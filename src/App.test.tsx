@@ -1,12 +1,17 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import App from "./App";
-import { createStore, Store } from "redux";
-import rootReducer, { AppState } from "./redux/reducers/rootReducer";
-import { AppActions } from "./redux/actions";
 import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./redux/reducers/userReducer";
+import campReducer from "./redux/reducers/campReducer";
 
-const store: Store<AppState, AppActions> = createStore(rootReducer);
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    camp: campReducer,
+  },
+});
 
 test("renders learn react link", () => {
   const app = render(

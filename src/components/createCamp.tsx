@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -8,9 +8,9 @@ import {
   makeStyles,
   TextField,
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
 import { createCamp } from "../model";
-import { CampActions, sendUserOperation } from "../redux/actions/campActions";
+import { useAppDispatch } from "../redux/hooks";
+import { sendUserOperation } from "../redux/reducers/campReducer";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -31,7 +31,7 @@ const CreateCamp: React.FC<CreateCampProps> = (props) => {
   const classes = useStyles();
   const { onClose, open } = props;
   const [campName, setCampName] = React.useState("");
-  const campsDispatch = useDispatch<Dispatch<CampActions>>();
+  const campsDispatch = useAppDispatch();
 
   const handleCreate = () => {
     campsDispatch(sendUserOperation(createCamp(campName)));

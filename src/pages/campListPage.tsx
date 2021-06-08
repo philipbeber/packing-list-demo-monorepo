@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment } from "react";
+import React, { Fragment } from "react";
 import * as Icons from "@material-ui/icons";
 import Box from "@material-ui/core/Box/Box";
 import Container from "@material-ui/core/Container/Container";
@@ -16,48 +16,48 @@ import {
   MenuItem,
   Select,
   TextField,
-  Toolbar,
+  Toolbar
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "../redux/reducers/rootReducer";
+import { useSelector } from "react-redux";
+import { AppState } from "../redux/store";
 import {
-  CampActions,
   closeCampList,
   sendUserOperation
-} from "../redux/actions/campActions";
+} from "../redux/reducers/campReducer";
 import {
   changeItemDeleted,
   changeItemState,
   createItem,
-  ItemState,
+  ItemState
 } from "../model";
 import { createSelector } from "reselect";
 import { selectedCampSelector, selectedListSelector } from "../redux/selectors";
+import { useAppDispatch } from "../redux/hooks";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
-    marginRight: -15,
+    marginRight: -15
   },
   appBarTitle: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuActionButton: {
-    marginRight: -16,
+    marginRight: -16
   },
   title: {
-    marginTop: 10,
+    marginTop: 10
   },
   addItemButton: {
     height: 32,
     marginTop: 16,
-    marginLeft: 16,
+    marginLeft: 16
   },
   itemStateSelector: {
-    height: 32,
+    height: 32
   },
   actionButton: {
-    marginRight: 6,
-  },
+    marginRight: 6
+  }
 }));
 
 const itemsViewSelector = createSelector(
@@ -68,17 +68,15 @@ const itemsViewSelector = createSelector(
       ?.filter((item) => !item.deleted)
       .map((item) => ({
         ...item,
-        checked: checkedIds.indexOf(item.id) >= 0,
+        checked: checkedIds.indexOf(item.id) >= 0
       }))
 );
 
 const CampListPage: React.FC = () => {
   const classes = useStyles();
   const [newItemName, setNewItemName] = React.useState("");
-  const [
-    appbarAnchorEl,
-    setAppbarAnchorEl,
-  ] = React.useState<null | HTMLElement>(null);
+  const [appbarAnchorEl, setAppbarAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const [setToAnchorEl, setSetToAnchorEl] = React.useState<null | HTMLElement>(
     null
   );
@@ -90,7 +88,7 @@ const CampListPage: React.FC = () => {
     itemsViewSelector(state, selectedItems)
   );
 
-  const campDispatch = useDispatch<Dispatch<CampActions>>();
+  const campDispatch = useAppDispatch();
   if (!camp || !list) {
     // Assert?
     return <Fragment></Fragment>;
@@ -141,16 +139,15 @@ const CampListPage: React.FC = () => {
     setSelectedItems([]);
   };
 
-  const handleCheckboxChange = (itemId: string) => (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    if (checked) {
-      setSelectedItems([...selectedItems, itemId]);
-    } else {
-      setSelectedItems(selectedItems.filter((i) => i !== itemId));
-    }
-  };
+  const handleCheckboxChange =
+    (itemId: string) =>
+    (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+      if (checked) {
+        setSelectedItems([...selectedItems, itemId]);
+      } else {
+        setSelectedItems(selectedItems.filter((i) => i !== itemId));
+      }
+    };
 
   return (
     <Container maxWidth="sm">
@@ -305,12 +302,12 @@ const CampListPage: React.FC = () => {
                   campDispatch(
                     sendUserOperation(
                       changeItemState(
-                              camp.id,
-                              list.id,
-                              [item.id],
-                              event.target.value as ItemState
-                            )
-                          )
+                        camp.id,
+                        list.id,
+                        [item.id],
+                        event.target.value as ItemState
+                      )
+                    )
                   )
                 }
               >

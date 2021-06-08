@@ -1,3 +1,4 @@
+import { Draft } from "@reduxjs/toolkit";
 import { CampOperations } from "./campOperations";
 import { Item } from "./item";
 import { List } from "./list";
@@ -11,46 +12,36 @@ export class Camp {
 }
 
 export function applyOperationToCamp(
-  camp: Camp,
+  camp: Draft<Camp>,
   operation: CampOperations
-): Camp {
+) {
   switch (operation.type) {
     case "CREATE_CAMP_LIST": {
-      return {
-        ...camp,
-        lists: [...camp.lists, new List(operation.listId, operation.name)],
-      };
+      camp.lists.push(new List(operation.listId, operation.name));
+      return;
     }
     case "CREATE_CAMP_ITEM": {
       const list = camp.lists.find((l) => l.id === operation.listId);
-      if (!list) {
-        return camp;
+      if (list) {
+        list.items.push(new Item(operation.itemId, operation.name));
       }
-      const newList = new List(list.id, list.name, [
-        ...list.items,
-        new Item(operation.itemId, operation.name),
-      ]);
-      return new Camp(
-        camp.id,
-        camp.name,
-        camp.lists.map((l) => (l === list ? newList : l))
-      );
+      return;
     }
     case "CHANGE_CAMP_ITEM_STATE": {
       const pl = operation;
-      return transformItems(camp, pl.listId, pl.itemIds, (item) =>
-        item.state !== pl.state
-          ? new Item(item.id, item.name, pl.state, item.deleted)
-          : item
-      );
+      return transformItems(camp, pl.listId, pl.itemIds, (item) => {
+        if (item.state !== pl.state) {
+          item.state = pl.state;
+        }
+      });
     }
     case "CHANGE_CAMP_ITEM_DELETED": {
       const pl = operation;
-      return transformItems(camp, pl.listId, pl.itemIds, (item) =>
-        item.deleted !== pl.deleted
-          ? new Item(item.id, item.name, item.state, pl.deleted)
-          : item
-      );
+      return transformItems(camp, pl.listId, pl.itemIds, (item) => {
+        if (item.deleted !== pl.deleted) {
+          item.deleted = pl.deleted;;;
+        }
+      });
     }
     default: {
       throw Error("Unknown operation " + JSON.stringify(operation));
@@ -62,31 +53,15 @@ function transformItems(
   camp: Camp,
   listId: string,
   itemIds: string[],
-  transform: (item: Item) => Item
-): Camp {
+  transform: (item: Item) => void
+) {
   const list = camp?.lists.find((l) => l.id === listId);
   if (!list) {
-    return camp;
+    return;
   }
-  let changed = false;
-  const newItems = list.items.map((item) => {
+  list.items.forEach((item) => {
     if (itemIds.indexOf(item.id) >= 0) {
-      const newItem = transform(item);
-      if (item !== newItem) {
-        changed = true;
-        return newItem;
-      }
-      return item;
+      transform(item);
     }
-    return item;
   });
-  if (!changed) {
-    return camp;
-  }
-  const newList = new List(list.id, list.name, newItems);
-  return new Camp(
-    camp.id,
-    camp.name,
-    camp.lists.map((l) => (l === list ? newList : l))
-  );
 }
