@@ -16,7 +16,12 @@ import {
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/reducers/rootReducer";
-import { CampActions } from "../redux/actions/campActions";
+import {
+  CampActions,
+  closeCamp,
+  openCampList,
+  sendUserOperation
+} from "../redux/actions/campActions";
 import { createList } from "../model";
 import CampListPage from "./campListPage";
 import { selectedCampSelector } from "../redux/selectors";
@@ -59,10 +64,7 @@ const CampPage: React.FC = () => {
     if (!newListName) {
       return;
     }
-    campDispatch({
-      type: "USER_OPERATION",
-      payload: createList(camp.id, newListName),
-    });
+    campDispatch(sendUserOperation(createList(camp.id, newListName)));
     setNewListName("");
   };
 
@@ -79,7 +81,7 @@ const CampPage: React.FC = () => {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
-            onClick={() => campDispatch({ type: "CLOSE_CAMP" })}
+            onClick={() => campDispatch(closeCamp())}
           >
             <Icons.ArrowBackIos />
           </IconButton>
@@ -134,12 +136,7 @@ const CampPage: React.FC = () => {
                 <ListItem
                   key={list.id}
                   button
-                  onClick={() =>
-                    campDispatch({
-                      type: "OPEN_CAMP_LIST",
-                      payload: { campId: camp.id, listId: list.id },
-                    })
-                  }
+                  onClick={() => campDispatch(openCampList(camp.id, list.id))}
                 >
                   <ListItemText primary={list.name} />
                 </ListItem>

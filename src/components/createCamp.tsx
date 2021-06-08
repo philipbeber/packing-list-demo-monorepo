@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { createCamp } from "../model";
-import { CampActions } from "../redux/actions/campActions";
+import { CampActions, sendUserOperation } from "../redux/actions/campActions";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
@@ -34,10 +34,7 @@ const CreateCamp: React.FC<CreateCampProps> = (props) => {
   const campsDispatch = useDispatch<Dispatch<CampActions>>();
 
   const handleCreate = () => {
-    campsDispatch({
-      type: "USER_OPERATION",
-      payload: createCamp(campName),
-    });
+    campsDispatch(sendUserOperation(createCamp(campName)));
     setCampName("");
     onClose();
   };

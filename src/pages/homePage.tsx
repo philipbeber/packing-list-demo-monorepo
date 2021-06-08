@@ -18,7 +18,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/reducers/rootReducer";
 import CreateCamp from "../components/createCamp";
-import { CampActions } from "../redux/actions/campActions";
+import {
+  CampActions,
+  clearCampData,
+  openCamp
+} from "../redux/actions/campActions";
 import { createSelector } from "reselect";
 
 const useStyles = makeStyles((theme) => ({
@@ -136,9 +140,7 @@ const HomePage: React.FC = () => {
                 <ListItem
                   key={camp.id}
                   button
-                  onClick={() =>
-                    campDispatch({ type: "OPEN_CAMP", payload: camp.id })
-                  }
+                  onClick={() => campDispatch(openCamp(camp.id))}
                 >
                   <ListItemText primary={camp.name} />
                 </ListItem>
@@ -158,7 +160,7 @@ const HomePage: React.FC = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => campDispatch({ type: "CLEAR_CAMP_DATA" })}
+              onClick={() => campDispatch(clearCampData())}
             >
               Clear camp data
             </Button>

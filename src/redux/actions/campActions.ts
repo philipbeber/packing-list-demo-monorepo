@@ -1,46 +1,57 @@
-import {
-  Camp,
-  CampOperation,
-  CampOperations,
-  Item,
-  ItemState,
-  List,
-} from "../../model";
+import { CampOperations } from "../../model";
 
-export interface IOpenCampAction {
-  readonly type: "OPEN_CAMP";
+export const openCamp = (campId: string): {
+  readonly type: "OPEN_CAMP",
   payload: string;
-}
+} => ({
+  type: "OPEN_CAMP",
+  payload: campId,
+});
 
-export interface ICloseCampAction {
-  readonly type: "CLOSE_CAMP";
-}
+export const closeCamp = (): {
+  readonly type: "CLOSE_CAMP"
+} => ({
+  type: "CLOSE_CAMP",
+});
 
-export interface IUserOperationAction {
-  readonly type: "USER_OPERATION";
+export const sendUserOperation = (operation: CampOperations): {
+  readonly type: "USER_OPERATION"
   payload: CampOperations;
-}
+} => ({
+  type: "USER_OPERATION",
+  payload: operation,
+});
 
-export interface IOpenCampListAction {
-  readonly type: "OPEN_CAMP_LIST";
+export const openCampList = (
+  campId: string,
+  listId: string
+): {
+  readonly type: "OPEN_CAMP_LIST"
   payload: {
     campId: string;
     listId: string;
   };
-}
+} => ({
+  type: "OPEN_CAMP_LIST",
+  payload: { campId, listId },
+});
 
-export interface ICloseCampListAction {
-  readonly type: "CLOSE_CAMP_LIST";
-}
+export const closeCampList = (): {
+  readonly type: "CLOSE_CAMP_LIST"
+} => ({
+  type: "CLOSE_CAMP_LIST",
+});
 
-export interface IClearCampDataAction {
-  readonly type: "CLEAR_CAMP_DATA";
-}
+export const clearCampData = (): {
+  readonly type: "CLEAR_CAMP_DATA"
+} => ({
+  type: "CLEAR_CAMP_DATA",
+});
 
 export type CampActions =
-  | IOpenCampAction
-  | ICloseCampAction
-  | IUserOperationAction
-  | IOpenCampListAction
-  | ICloseCampListAction
-  | IClearCampDataAction;
+  | ReturnType<typeof openCamp>
+  | ReturnType<typeof closeCamp>
+  | ReturnType<typeof sendUserOperation>
+  | ReturnType<typeof openCampList>
+  | ReturnType<typeof closeCampList>
+  | ReturnType<typeof clearCampData>;;

@@ -20,7 +20,11 @@ import {
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/reducers/rootReducer";
-import { CampActions } from "../redux/actions/campActions";
+import {
+  CampActions,
+  closeCampList,
+  sendUserOperation
+} from "../redux/actions/campActions";
 import {
   changeItemDeleted,
   changeItemState,
@@ -96,10 +100,7 @@ const CampListPage: React.FC = () => {
     if (!newItemName) {
       return;
     }
-    campDispatch({
-      type: "USER_OPERATION",
-      payload: createItem(camp.id, list.id, newItemName),
-    });
+    campDispatch(sendUserOperation(createItem(camp.id, list.id, newItemName)));
     setNewItemName("");
   };
 
@@ -119,10 +120,11 @@ const CampListPage: React.FC = () => {
 
   const handleBulkChangeItemState = (itemState: ItemState) => () => {
     if (selectedItems.length) {
-      campDispatch({
-        type: "USER_OPERATION",
-        payload: changeItemState(camp.id, list.id, selectedItems, itemState),
-      });
+      campDispatch(
+        sendUserOperation(
+          changeItemState(camp.id, list.id, selectedItems, itemState)
+        )
+      );
     }
     setSelectedItems([]);
     setSetToAnchorEl(null);
@@ -130,10 +132,11 @@ const CampListPage: React.FC = () => {
 
   const handleBulkDeleteItems = () => {
     if (selectedItems.length) {
-      campDispatch({
-        type: "USER_OPERATION",
-        payload: changeItemDeleted(camp.id, list.id, selectedItems, true),
-      });
+      campDispatch(
+        sendUserOperation(
+          changeItemDeleted(camp.id, list.id, selectedItems, true)
+        )
+      );
     }
     setSelectedItems([]);
   };
@@ -158,7 +161,7 @@ const CampListPage: React.FC = () => {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
-            onClick={() => campDispatch({ type: "CLOSE_CAMP_LIST" })}
+            onClick={() => campDispatch(closeCampList())}
           >
             <Icons.ArrowBackIos />
           </IconButton>
@@ -261,7 +264,7 @@ const CampListPage: React.FC = () => {
               onClose={() => setSetToAnchorEl(null)}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "left",
+                horizontal: "left"
               }}
             >
               <MenuItem
@@ -299,15 +302,16 @@ const CampListPage: React.FC = () => {
                 variant="outlined"
                 className={classes.itemStateSelector}
                 onChange={(event) =>
-                  campDispatch({
-                    type: "USER_OPERATION",
-                    payload: changeItemState(
-                      camp.id,
-                      list.id,
-                      [item.id],
-                      event.target.value as ItemState
-                    ),
-                  })
+                  campDispatch(
+                    sendUserOperation(
+                      changeItemState(
+                              camp.id,
+                              list.id,
+                              [item.id],
+                              event.target.value as ItemState
+                            )
+                          )
+                  )
                 }
               >
                 <MenuItem value={ItemState.Unpurchased}>Unpurchased</MenuItem>
