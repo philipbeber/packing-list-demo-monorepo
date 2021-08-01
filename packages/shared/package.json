@@ -1,0 +1,19 @@
+{
+  "name": "packing-list-shared",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Philip Beber <philip.beber@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/shared.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
