@@ -1,4 +1,5 @@
 {
+  "name": "packing-list-mobile",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -6,7 +7,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "postinstall": "rm -rf node_modules/packing-list-shared && rsync -a --exclude=node_modules --delete ../shared/ node_modules/packing-list-shared/"
   },
   "jest": {
     "preset": "jest-expo"
@@ -25,7 +27,7 @@
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-web-browser": "~9.2.0",
-    "packing-list-shared": "../shared",
+    "packing-list-shared": "^0.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
