@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { AppState } from "./redux/store";
+import { AppState } from "packing-list-shared";
 import HomePage from "./pages/homePage";
 import CampPage from "./pages/campPage";
 function App() {

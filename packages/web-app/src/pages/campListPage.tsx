@@ -19,20 +19,23 @@ import {
   Toolbar
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
 import {
+  AppState,
   closeCampList,
   sendUserOperation
-} from "../redux/reducers/campReducer";
+} from "packing-list-shared";
 import {
   changeItemDeleted,
   changeItemState,
   createItem,
   ItemState
-} from "../model";
+} from "packing-list-shared";
 import { createSelector } from "reselect";
-import { selectedCampSelector, selectedListSelector } from "../redux/selectors";
-import { useAppDispatch } from "../redux/hooks";
+import {
+  selectedCampSelector,
+  selectedListSelector
+} from "packing-list-shared";
+import { useAppDispatch } from "packing-list-shared";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {

@@ -6,20 +6,19 @@ import {
   DialogTitle,
   Grid,
   makeStyles,
-  TextField,
+  TextField
 } from "@material-ui/core";
-import { createCamp } from "../model";
-import { useAppDispatch } from "../redux/hooks";
-import { sendUserOperation } from "../redux/reducers/campReducer";
+import { createCamp } from "packing-list-shared";
+import { useAppDispatch, sendUserOperation } from "packing-list-shared";
 
 const useStyles = makeStyles((theme) => ({
   textfield: {
     margin: theme.spacing(2),
-    textAlign: "center",
+    textAlign: "center"
   },
   button: {
-    margin: theme.spacing(2),
-  },
+    margin: theme.spacing(2)
+  }
 }));
 
 interface CreateCampProps {

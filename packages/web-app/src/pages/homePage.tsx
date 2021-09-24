@@ -16,11 +16,11 @@ import {
   Toolbar
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
+import { AppState } from "packing-list-shared";
 import CreateCamp from "../components/createCamp";
 import { createSelector } from "reselect";
-import { useAppDispatch } from "../redux/hooks";
-import { clearCampData, openCamp } from "../redux/reducers/campReducer";
+import { useAppDispatch } from "packing-list-shared";
+import { clearCampData, openCamp } from "packing-list-shared";
 
 const useStyles = makeStyles((theme) => ({
   root: {

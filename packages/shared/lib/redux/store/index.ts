@@ -46,6 +46,6 @@ export function createStore(storage: Storage) {
 }
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
-type StoreType = ReturnType<typeof createStore>["store"]
-export type AppState = ReturnType<StoreType["getState"]>
+type StoreType = ReturnType<typeof createStore>["store"];
+export type AppState = ReturnType<StoreType["getState"]>;
 export type AppDispatch = StoreType["dispatch"];

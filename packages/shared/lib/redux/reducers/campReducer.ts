@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { applyOperationToCamp, Camp, CampOperations } from "../../model";
 
-interface CampState {
+export interface CampState {
   selectedCampId?: string;
   selectedListId?: string;
   camps: Camp[];
@@ -9,7 +9,7 @@ interface CampState {
 }
 export const initialState: CampState = {
   camps: [],
-  pendingOperations: []
+  pendingOperations: [],
 };
 
 const campSlice = createSlice({
@@ -52,8 +52,8 @@ const campSlice = createSlice({
     },
     clearCampData() {
       return initialState;
-    }
-  }
+    },
+  },
 });
 
 // Extract the action creators object and the reducer
@@ -64,7 +64,7 @@ export const {
   //openCampList,
   closeCampList,
   sendUserOperation,
-  clearCampData
+  clearCampData,
 } = actions;
 export const openCampList = (campId: string, listId: string) =>
   actions.openCampList({ campId, listId });

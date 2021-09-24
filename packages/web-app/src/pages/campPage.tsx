@@ -15,12 +15,16 @@ import {
   Toolbar
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
-import { createList } from "../model";
+import { AppState } from "packing-list-shared";
+import { createList } from "packing-list-shared";
 import CampListPage from "./campListPage";
-import { selectedCampSelector } from "../redux/selectors";
-import { closeCamp, openCampList, sendUserOperation } from "../redux/reducers/campReducer";
-import { useAppDispatch } from "../redux/hooks";
+import { selectedCampSelector } from "packing-list-shared";
+import {
+  closeCamp,
+  openCampList,
+  sendUserOperation
+} from "packing-list-shared";
+import { useAppDispatch } from "packing-list-shared";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -132,11 +136,7 @@ const CampPage: React.FC = () => {
                 <ListItem
                   key={list.id}
                   button
-                  onClick={() =>
-                    campDispatch(
-                      openCampList(camp.id, list.id)
-                    )
-                  }
+                  onClick={() => campDispatch(openCampList(camp.id, list.id))}
                 >
                   <ListItemText primary={list.name} />
                 </ListItem>
