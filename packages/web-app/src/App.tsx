@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "packing-list-shared";
 import { AppState } from "packing-list-shared";
 import HomePage from "./pages/homePage";
 import CampPage from "./pages/campPage";

@@ -14,7 +14,7 @@ import {
   TextField,
   Toolbar
 } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useSelector } from "packing-list-shared";
 import { AppState } from "packing-list-shared";
 import { createList } from "packing-list-shared";
 import CampListPage from "./campListPage";

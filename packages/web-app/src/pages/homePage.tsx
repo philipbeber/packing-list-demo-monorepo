@@ -15,7 +15,7 @@ import {
   MenuItem,
   Toolbar
 } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useSelector } from "packing-list-shared";
 import { AppState } from "packing-list-shared";
 import CreateCamp from "../components/createCamp";
 import { createSelector } from "reselect";

@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import App from "./App";
-import { Provider } from "react-redux";
+import { Provider } from "packing-list-shared";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userReducer, campReducer } from "packing-list-shared";
 

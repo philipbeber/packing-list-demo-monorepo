@@ -8,8 +8,7 @@
     "build": "react-scripts build",
     "build-demo": "react-scripts build; rimraf demo; move-file build demo",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postinstall": "rm -rf node_modules/packing-list-shared && rsync -a --exclude=node_modules --delete ../shared/ node_modules/packing-list-shared/"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,18 +42,17 @@
     "@types/node": "^12.12.67",
     "@types/react": "^16.9.51",
     "@types/react-dom": "^16.9.8",
-    "@types/react-redux": "^7.1.9",
     "lodash": "^4.17.20",
     "packing-list-shared": "^0.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.1",
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
     "short-uuid": "^4.1.0",
+    "tsyringe": "^4.6.0",
     "typescript": "^3.7.5"
   },
   "prettier": {
