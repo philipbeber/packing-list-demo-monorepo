@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
-    "declaration": true,
-    "outDir": "./dist"
+    "module": "esnext",
+    "target": "es5",
+    "lib": ["es2020", "dom"],
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "noErrorTruncation": false,
+    "allowJs": true,
+    // Otherwise we get react-native typings which conflict with dom.lib.
+    "types": ["node", "react"]
   },
-
-  "include": [
-    "lib/**/*"
-  ]
+  "exclude": ["**/.*/", "**/build", "**/node_modules", "docs/export"],
+  "include": ["lib/**/*"]
 }
